@@ -12,10 +12,17 @@ location ~ ^/index\.php(/|$) {
     fastcgi_pass php:9000;
     fastcgi_split_path_info ^(.+\.php)(/.*)$;
     fastcgi_read_timeout 240s;
+
+
+    fastcgi_buffer_size 128k;
+    fastcgi_buffers 4 256k;
+    fastcgi_busy_buffers_size 256k;
+
     include fastcgi_params;
 
+
     # optionally set the value of the environment variables used in the application
-    # fastcgi_param APP_ENV prod;
+    fastcgi_param APP_ENV dev;
     # fastcgi_param APP_SECRET <app-secret-id>;
     # fastcgi_param DATABASE_URL "mysql://db_user:db_pass@host:3306/db_name";
 
