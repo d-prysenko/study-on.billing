@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\DTO\UserDto;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -14,33 +15,34 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $email;
+    private string $email;
 
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private array $roles = ["ROLE_USER"];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
-    private $password;
+    private string $password;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $balance;
+    private float $balance = 0.0;
 
     public function getId(): ?int
     {
@@ -125,7 +127,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
@@ -145,12 +147,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public static function fromDto(UserDto $userDto): User
     {
-        $user = new User();
+        $user = new self();
         $user->setEmail($userDto->username);
-
-        $hashed_password = $userDto->password;
-
-        $user->setPassword($hashed_password);
+        $user->setBalance(0.0);
+        $user->setPassword($userDto->password);
         return $user;
     }
 }

@@ -18,6 +18,6 @@ api_v1_current_user:
   methods:    GET
 
 app.swagger_ui:
-  path: /api/v1/doc
-  methods: GET
-  defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
+  path:       /api/v1/doc
+  methods:    GET
+  defaults:   { _controller: nelmio_api_doc.controller.swagger_ui }

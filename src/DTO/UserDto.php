@@ -6,14 +6,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
-/**
- * @UniqueEntity(fields={"username": "email"}, entityClass="App\Entity\User", em="default")
- */
 class UserDto
 {
     /**
-     * @Assert\NotBlank(message="Name is mandatory")
-     * @Assert\Email(message="This value is not a valid email address.")
+     * @Assert\NotBlank(message="Username is mandatory")
+     * @Assert\Email(message="Field `username` is not a valid email address.")
      */
     public string $username;
 

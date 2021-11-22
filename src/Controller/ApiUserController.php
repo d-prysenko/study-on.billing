@@ -23,16 +23,18 @@ class ApiUserController extends AbstractController
 
             $tokenData = $jwtEncoder->decode($token);
 
-            $user = $userRep->findOneBy(['email' => $tokenData['username']]);
+            if (isset($tokenData['username'])) {
+                $user = $userRep->findOneBy(['email' => $tokenData['username']]);
 
-            if ($user) {
-                return $this->json([
-                    'username' => $user->getEmail(),
-                    'roles' => $user->getRoles(),
-                    'balance' => $user->getBalance()
-                ]);
+                if ($user) {
+                    return $this->json([
+                        'code' => 200,
+                        'username' => $user->getEmail(),
+                        'roles' => $user->getRoles(),
+                        'balance' => $user->getBalance()
+                    ]);
+                }
             }
-
             return $this->json([
                 'code' => 400,
                 'message' => 'Cannot find user for this email',
