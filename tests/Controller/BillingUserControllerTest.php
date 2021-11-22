@@ -30,7 +30,7 @@ class BillingUserControllerTest extends AbstractTest
             json_encode(array(
                 'username' => $username,
                 'password' => $password,
-            ))
+            ), JSON_THROW_ON_ERROR)
         );
 
         $data = json_decode($client->getResponse()->getContent(), true);
@@ -89,9 +89,35 @@ class BillingUserControllerTest extends AbstractTest
         ];
     }
 
-//    public function testCurrentUser(): void
-//    {
-////        $client = $this->createAuthenticatedClient();
-////        dd($client);
-//    }
+    public function testCurrentUser(): void
+    {
+        $client = static::getClient();
+        $email = "user@email.com";
+        $token = $this->getToken($email, "qwerty");
+
+        $client->request(
+            'GET',
+            "/api/v1/users/current",
+            array(),
+            array(),
+            array('HTTP_Authorization' => "Bearer $token")
+        );
+
+        $status = $client->getResponse()->getStatusCode();
+        $contentType = $client->getResponse()->headers->get('content-type');
+
+        $info = 'status: ' . $status . "\n";
+        $info .= 'content-type: ' . $contentType;
+        if ($contentType === "application/json")
+        {
+            $info .= "content:\n" . $client->getResponse()->getContent();
+        }
+        //dd($info);
+
+        $this->assertEquals(200, $status);
+
+        $userData = json_decode($client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertEquals($email, $userData['username']);
+    }
 }
