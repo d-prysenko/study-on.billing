@@ -26,6 +26,11 @@ security:
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
+        refresh:
+            pattern: ^/api/v1/token/refresh
+            stateless: true
+#            anonymous: true
+
         api:
             pattern: ^/api/v1
             stateless: true
@@ -52,6 +57,7 @@ security:
         - {path: ^/api/v1/auth, roles: IS_AUTHENTICATED_ANONYMOUSLY}
         - {path: ^/api/v1/register, roles: IS_AUTHENTICATED_ANONYMOUSLY}
         - {path: ^/api/v1/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+        - {path: ^/api/v1/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - {path: ^/api/v1, roles: IS_AUTHENTICATED_FULLY}
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
