@@ -15,44 +15,45 @@ use OpenApi\Annotations as OA;
 class ApiUserController extends AbstractController
 {
     /**
-     *
      * @OA\Get(
-     *     summary="Returns info for user",
-     *  @OA\Response(
-     *     response="200",
-     *     description="JW token",
+     *	  summary="Returns information about current user",
+     *	  @OA\Response(
+     *		 response="200",
+     *		 description="JW token",
+     *		 @OA\MediaType(
+     *			 mediaType="application/json",
+     *			 @OA\Schema(
+     *				 @OA\Property(
+     *					 property="code",
+     *					 type="int"
+     *				 ),
+     *				 @OA\Property(
+     *					 property="username",
+     *					 type="string"
+     *				 ),
+     *				 @OA\Property(
+     *					 property="roles",
+     *					 type="array",
+     *                   @OA\Items(items={"ROLE_USER", "ROLE_ADMIN"})
+     *				 ),
+     *				 @OA\Property(
+     *					 property="balance",
+     *					 type="float"
+     *				 ),
+     *				 example={"code": 200, "username": "user@test.com", "roles": {"ROLE_USER", "ROLE_SUPER_USER"}, "balance": 20.0}
+     *			 )
+     *		 )
+     *	  )
+     * )
      *
-     *     @OA\MediaType(
-     *       mediaType="application/json",
-     *       @OA\Schema(
-     *         @OA\Property(
-     *           property="code",
-     *           type="int"
-     *         ),
-     *         @OA\Property(
-     *           property="username",
-     *           type="string"
-     *         ),
-     *         @OA\Property(
-     *           property="roles",
-     *           type="array",
-     *           @OA\Items(items={"ROLE_USER", "ROLE_ADMIN"})
-     *         ),
-     *         @OA\Property(
-     *           property="balance",
-     *           type="float"
-     *         ),
-     *        example={"code": 200, "username": "user@test.com", "roles": {"ROLE_USER", "ROLE_SUPER_USER"}, "balance": 20.0}
-     *       )
-     * )
-     * )
-     * )
-     * * @OA\Parameter(
+     * @OA\Parameter(
      *     name="Authorization",
      *     in="header",
-     *     description="Header must contain JWT Authorization token",
-     *     @OA\Schema(type="string"), example="Bearer <token>"
+     *     description="JWT Authorization token",
+     *     required=true,
+     *     @OA\Schema(type="string", example="Bearer *token*")
      * )
+     *
      * @Security(name="Bearer")
      */
     public function current(Request $request, JWTEncoderInterface $jwtEncoder): Response
