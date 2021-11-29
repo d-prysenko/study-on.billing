@@ -57,7 +57,9 @@ security:
         - {path: ^/api/v1/auth, roles: IS_AUTHENTICATED_ANONYMOUSLY}
         - {path: ^/api/v1/register, roles: IS_AUTHENTICATED_ANONYMOUSLY}
         - {path: ^/api/v1/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+        - {path: ^/api/v1/courses, roles: IS_AUTHENTICATED_ANONYMOUSLY}
         - {path: ^/api/v1/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - {path: ^/api/v1/courses/(\w*)/pay, roles: IS_AUTHENTICATED_FULLY}
         - {path: ^/api/v1, roles: IS_AUTHENTICATED_FULLY}
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

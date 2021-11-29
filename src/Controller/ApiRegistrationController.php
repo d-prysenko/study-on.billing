@@ -78,9 +78,7 @@ class ApiRegistrationController extends AbstractController
             ], 401);
         }
 
-        $user = $em->getRepository(User::class)->findOneBy([
-            'email' => $userDto->username,
-        ]);
+        $user = $em->getRepository(User::class)->findByEmail($userDto->username);
 
         if (!is_null($user))
         {

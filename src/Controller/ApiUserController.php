@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Service\PaymentService;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
+use Lexik\Bundle\JWTAuthenticationBundle\Exception\UserNotFoundException;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,40 +58,38 @@ class ApiUserController extends AbstractController
      *
      * @Security(name="Bearer")
      */
-    public function current(Request $request, JWTEncoderInterface $jwtEncoder): Response
+    public function current(Request $request, JWTEncoderInterface $jwtEncoder, PaymentService $paymentService): Response
     {
-        try {
-            $em = $this->getDoctrine()->getManager();
-            $userRep = $em->getRepository(User::class);
+        $em = $this->getDoctrine()->getManager();
+        $userRep = $em->getRepository(User::class);
 
-            $token = $request->headers->get('authorization');
-            $token = explode(" ", $token)[1];
+//
+//        $token = $request->headers->get('authorization');
+//        $token = explode(" ", $token)[1];
+//
+//        try {
+//            $tokenData = $jwtEncoder->decode($token);
+//        } catch (JWTDecodeFailureException $ex) {
+//            return $this->json(['code' => 400, 'message' => $ex->getMessage()]);
+//        }
+//
+//        $user = $userRep->findOneBy(['email' => $tokenData['username']]);
 
-            $tokenData = $jwtEncoder->decode($token);
+        $user = $userRep->fetchUserByRequest($request);
 
-            if (isset($tokenData['username'])) {
-                $user = $userRep->findOneBy(['email' => $tokenData['username']]);
+//        if (is_null($user)) {
+//            throw new UserNotFoundException('token', $request->headers->get('authorization'));
+//            return $this->json([
+//                'code' => 400,
+//                'message' => 'Cannot find user for this email',
+//            ]);
+//        }
 
-                if ($user) {
-                    return $this->json([
-                        'code' => 200,
-                        'username' => $user->getEmail(),
-                        'roles' => $user->getRoles(),
-                        'balance' => $user->getBalance()
-                    ]);
-                }
-            }
-            return $this->json([
-                'code' => 400,
-                'message' => 'Cannot find user for this email',
-            ]);
-
-        } catch (JWTDecodeFailureException $ex) {
-            return $this->json([
-                'code' => 400,
-                'message' => $ex->getMessage(),
-            ]);
-        }
-
+        return $this->json([
+            'code' => 200,
+            'username' => $user->getEmail(),
+            'roles' => $user->getRoles(),
+            'balance' => $user->getBalance()
+        ]);
     }
 }
