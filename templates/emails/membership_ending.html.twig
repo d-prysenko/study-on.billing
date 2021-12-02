@@ -1,0 +1,4 @@
+{% extends 'emails/base.html.twig' %}
+{% block content %}
+    Подписка на курс '{{ course_name }}' заканчивается {{ expiration_date|date("F jS \\a\\t g:ia") }}.
+{% endblock %}

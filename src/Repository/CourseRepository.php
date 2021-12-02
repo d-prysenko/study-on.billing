@@ -19,6 +19,11 @@ class CourseRepository extends ServiceEntityRepository
         parent::__construct($registry, Course::class);
     }
 
+    public function findByCode(string $code): ?Course
+    {
+        return $this->findOneBy(['code' => $code]);
+    }
+
     // /**
     //  * @return Course[] Returns an array of Course objects
     //  */

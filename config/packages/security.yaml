@@ -54,6 +54,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - {path: ^/api/v1/courses, roles: ROLE_SUPER_ADMIN, methods: [POST] }
         - {path: ^/api/v1/auth, roles: IS_AUTHENTICATED_ANONYMOUSLY}
         - {path: ^/api/v1/register, roles: IS_AUTHENTICATED_ANONYMOUSLY}
         - {path: ^/api/v1/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY}

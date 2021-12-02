@@ -24,9 +24,29 @@ api_v1_current_user:
   controller: App\Controller\ApiUserController::current
   methods:    GET
 
+api_v1_course_create:
+  path:       /api/v1/courses
+  controller: App\Controller\ApiCourseController::createCourse
+  methods:    POST
+
+api_v1_course_edit:
+  path:       /api/v1/courses/{code}/edit
+  controller: App\Controller\ApiCourseController::editCourse
+  methods:    POST
+
+api_v1_course_delete:
+  path: /api/v1/courses
+  controller: App\Controller\ApiCourseController::deleteCourse
+  methods: POST
+
 api_v1_courses:
   path:       /api/v1/courses
   controller: App\Controller\ApiCourseController::getCourses
+  methods:    GET
+
+api_v1_user_courses:
+  path:       /api/v1/me/courses
+  controller: App\Controller\ApiCourseController::getUserCourses
   methods:    GET
 
 api_v1_course:
@@ -34,8 +54,8 @@ api_v1_course:
   controller: App\Controller\ApiCourseController::getCourse
   methods:    GET
 
-api_v1_course_pay:
-  path:       /api/v1/courses/{code}/pay
+api_v1_course_buy:
+  path:       /api/v1/courses/{code}/buy
   controller: App\Controller\ApiCourseController::buyCourse
   methods:    POST
 
