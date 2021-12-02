@@ -40,8 +40,8 @@ env_create:
 	echo "DATABASE_URL=pgsql://pguser:pguser@study-onbilling_database_1:5432/study_on_billing" >> .env.local
 	echo "JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem" >> .env.local
 	echo "JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem" >> .env.local
-	echo "JWT_PASSPHRASE=10hFsNk4Ra3kYHStaI0I" >> testfile.txt
-	echo "MAILER_DSN=smtp://mailhog:1025" >> testfile.txt
+	echo "JWT_PASSPHRASE=10hFsNk4Ra3kYHStaI0I" >> .env.local
+	echo "MAILER_DSN=smtp://mailhog:1025" >> .env.local
 
 composer_install:
 	${COMPOSER} install
