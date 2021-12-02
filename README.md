@@ -1,7 +1,7 @@
 # study-on.billing
 
 ```
-git clone https://github.com/d-prysenko/study-on.git
+git clone https://github.com/d-prysenko/study-on.billing.git
 make install
 ```
 
