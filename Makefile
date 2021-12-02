@@ -42,6 +42,7 @@ env_create:
 	echo "JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem" >> .env.local
 	echo "JWT_PASSPHRASE=10hFsNk4Ra3kYHStaI0I" >> .env.local
 	echo "MAILER_DSN=smtp://mailhog:1025" >> .env.local
+	cp .env.local .env.test.local
 
 composer_install:
 	${COMPOSER} install
