@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Course;
 use App\Entity\Transaction;
 use App\Entity\User;
+use App\Exception\AlreadyExistsException;
 use App\Exception\NotEnoughFundsException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,14 +32,27 @@ class PaymentService
             throw new NotEnoughFundsException();
         }
 
+        $transactionRep = $this->em->getRepository(Transaction::class);
+
+        $transactionForTheCourse = $transactionRep->findOneBy(['billing_user' => $user, 'course' => $course]);
+
+        if (!is_null($transactionForTheCourse) && $course->getType() !== COURSE_TYPE_RENT) {
+            throw new AlreadyExistsException();
+        }
+
         $this->em->wrapInTransaction(function($em) use ($user, $course) {
             $user->setBalance($user->getBalance() - $course->getCost());
 
-            $transaction = new Transaction();
-            $transaction->setCourse($course);
-            $transaction->setAmount($course->getCost());
-            $transaction->setBillingUser($user);
-            $transaction->setType(TRANSACTION_PAYMENT);
+            $transaction = (new Transaction())
+                ->setCourse($course)
+                ->setAmount($course->getCost())
+                ->setBillingUser($user)
+                ->setType(TRANSACTION_PAYMENT)
+            ;
+
+            if ($course->getType() === COURSE_TYPE_RENT) {
+                $transaction->setExpiration((new \DateTime())->add($course->getDuration()));
+            }
 
             $em->persist($transaction);
         });
@@ -49,10 +63,11 @@ class PaymentService
         $this->em->wrapInTransaction(function($em) use ($user, $amount) {
             $user->setBalance($user->getBalance() + $amount);
 
-            $transaction = new Transaction();
-            $transaction->setAmount($amount);
-            $transaction->setBillingUser($user);
-            $transaction->setType(TRANSACTION_DEPOSIT);
+            $transaction = (new Transaction())
+                ->setAmount($amount)
+                ->setBillingUser($user)
+                ->setType(TRANSACTION_DEPOSIT)
+            ;
 
             $em->persist($transaction);
         });

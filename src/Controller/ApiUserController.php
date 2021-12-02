@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
 
-class ApiUserController extends AbstractController
+class ApiUserController extends ApiAbstractController
 {
     /**
      * @OA\Get(
@@ -58,32 +58,14 @@ class ApiUserController extends AbstractController
      *
      * @Security(name="Bearer")
      */
-    public function current(Request $request, JWTEncoderInterface $jwtEncoder, PaymentService $paymentService): Response
+    public function current(Request $request): Response
     {
         $em = $this->getDoctrine()->getManager();
         $userRep = $em->getRepository(User::class);
 
-//
-//        $token = $request->headers->get('authorization');
-//        $token = explode(" ", $token)[1];
-//
-//        try {
-//            $tokenData = $jwtEncoder->decode($token);
-//        } catch (JWTDecodeFailureException $ex) {
-//            return $this->json(['code' => 400, 'message' => $ex->getMessage()]);
-//        }
-//
-//        $user = $userRep->findOneBy(['email' => $tokenData['username']]);
 
         $user = $userRep->fetchUserByRequest($request);
 
-//        if (is_null($user)) {
-//            throw new UserNotFoundException('token', $request->headers->get('authorization'));
-//            return $this->json([
-//                'code' => 400,
-//                'message' => 'Cannot find user for this email',
-//            ]);
-//        }
 
         return $this->json([
             'code' => 200,

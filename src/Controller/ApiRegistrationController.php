@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
 
-class ApiRegistrationController extends AbstractController
+class ApiRegistrationController extends ApiAbstractController
 {
     /**
      * @OA\Post(
@@ -61,8 +61,14 @@ class ApiRegistrationController extends AbstractController
      *
      * @Security(name="Bearer")
      */
-    public function register(Request $request, RefreshTokenManagerInterface $refreshTokenManager, UserPasswordHasherInterface $passwordHasher, ValidatorInterface $validator, JWTTokenManagerInterface $JWTManager): Response
-    {
+    public function register(
+        Request $request,
+        RefreshTokenManagerInterface $refreshTokenManager,
+        UserPasswordHasherInterface $passwordHasher,
+        ValidatorInterface $validator,
+        JWTTokenManagerInterface $JWTManager
+    ): Response {
+
         $em = $this->getDoctrine()->getManager();
 
         $serializer = SerializerBuilder::create()->build();
@@ -106,5 +112,4 @@ class ApiRegistrationController extends AbstractController
             'refresh_token' => $refreshToken->getRefreshToken()
         ], 201);
     }
-
 }

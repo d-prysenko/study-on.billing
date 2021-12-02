@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ApiTransactionsController extends AbstractController
+class ApiTransactionsController extends ApiAbstractController
 {
     public function getTransactions(Request $request, JWTEncoderInterface $jwtEncoder, PaymentService $paymentService): Response
     {

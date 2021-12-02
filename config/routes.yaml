@@ -35,9 +35,9 @@ api_v1_course_edit:
   methods:    POST
 
 api_v1_course_delete:
-  path: /api/v1/courses
+  path:       /api/v1/courses/{code}/delete
   controller: App\Controller\ApiCourseController::deleteCourse
-  methods: POST
+  methods:    POST
 
 api_v1_courses:
   path:       /api/v1/courses

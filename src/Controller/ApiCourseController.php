@@ -7,6 +7,7 @@ use App\DTO\UserDto;
 use App\Entity\Course;
 use App\Entity\Transaction;
 use App\Entity\User;
+use App\Exception\AlreadyExistsException;
 use App\Exception\NotEnoughFundsException;
 use App\Repository\CourseRepository;
 use App\Repository\TransactionRepository;
@@ -20,16 +21,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ApiCourseController extends AbstractController
+class ApiCourseController extends ApiAbstractController
 {
-    private function jsonMessage(int $code, string $message): JsonResponse
-    {
-        return $this->json([
-            'code' => $code,
-            'message' => $message,
-        ]);
-    }
-
     public function getCourses(CourseRepository $courseRepository): Response
     {
         return $this->json($courseRepository->findAll());
@@ -37,7 +30,7 @@ class ApiCourseController extends AbstractController
 
     public function getCourse(string $code, CourseRepository $courseRepository): Response
     {
-        return $this->json($courseRepository->findOneBy(['code' => $code]));
+        return $this->json($courseRepository->findByCode($code));
     }
 
     public function getUserCourses(Request $request): Response
@@ -64,28 +57,19 @@ class ApiCourseController extends AbstractController
 
         if (!is_null($course))
         {
-            return $this->json([
-                'code' => 400,
-                'message' => 'The course code already in use!',
-            ], 400);
+            return $this->jsonMessage(400,'The course code already in use!');
         }
 
         $course = Course::fromDTO($courseDto);
 
         if ($course->getType() === COURSE_TYPE_RENT && $course->getDuration() === null) {
-            return $this->json([
-                'code' => 400,
-                'message' => 'If the type of the course is "rent" than "duration" must be set!',
-            ], 400);
+            return $this->jsonMessage(400, 'If the type of the course is "rent" than "duration" must be set!');
         }
 
         $em->persist($course);
         $em->flush();
 
-        return $this->json([
-            'code' => 201,
-            'message' => 'Success!',
-        ], 201);
+        return $this->jsonMessage(201, 'Success!');
     }
 
     public function deleteCourse(string $code, Request $request): Response
@@ -150,10 +134,14 @@ class ApiCourseController extends AbstractController
 
         $em->flush();
 
-        return $this->json([
-            'code' => 200,
-            'course' => json_encode($course, JSON_THROW_ON_ERROR),
-        ]);
+        try {
+            return $this->json([
+                'code' => 200,
+                'course' => json_encode($course, JSON_THROW_ON_ERROR),
+            ]);
+        } catch (\JsonException $e) {
+            return $this->jsonMessage(500, 'Unable to encode response');
+        }
     }
 
     public function buyCourse(string $code, Request $request, PaymentService $paymentService): Response
@@ -174,7 +162,8 @@ class ApiCourseController extends AbstractController
             $paymentService->pay($user, $course);
         } catch (NotEnoughFundsException $e) {
             return $this->jsonMessage(400, 'Not enough funds!');
-        } catch (\Throwable $e) {
+        } catch (AlreadyExistsException $e) {
+            return $this->jsonMessage(400, 'You already have this course!');
         }
 
         return $this->json([
