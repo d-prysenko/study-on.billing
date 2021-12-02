@@ -2,6 +2,7 @@
 
 ```
 git clone https://github.com/d-prysenko/study-on.billing.git
+cd study-on.billing
 make install
 ```
 
