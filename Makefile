@@ -53,4 +53,4 @@ db_up:
 composer_install:
 	${COMPOSER} install
 
-install: env_create up composer_install db_up
+install: env_create up composer_install db_up fixtload
