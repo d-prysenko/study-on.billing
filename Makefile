@@ -45,10 +45,10 @@ env_create:
 	cp .env.local .env.test.local
 
 db_up:
-	docker-compose exec php bin/console doctrine:database:create
-	docker-compose exec php bin/console doctrine:migrations:migrate
-	docker-compose exec php bin/console doctrine:database:create --env=test
-	docker-compose exec php bin/console doctrine:migrations:migrate --env=test
+	docker-compose exec php bin/console doctrine:database:create --if-not-exists
+	docker-compose exec php bin/console doctrine:migrations:migrate --no-interaction
+	docker-compose exec php bin/console doctrine:database:create --env=test --if-not-exists
+	docker-compose exec php bin/console doctrine:migrations:migrate --env=test --no-interaction
 
 composer_install:
 	${COMPOSER} install
