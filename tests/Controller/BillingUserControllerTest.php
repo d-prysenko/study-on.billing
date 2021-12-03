@@ -2,7 +2,9 @@
 
 namespace App\Tests\Controller;
 
+use App\DataFixtures\CourseFixtures;
 use App\DataFixtures\UserFixtures;
+use App\Service\PaymentService;
 use App\Tests\AbstractTest;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -14,7 +16,8 @@ class BillingUserControllerTest extends AbstractTest
     protected function getFixtures(): array
     {
         $hasher = static::$container->get('security.user_password_hasher');
-        return [new UserFixtures($hasher)];
+        $paymentService = new PaymentService(self::getEntityManager());
+        return [new CourseFixtures(), new UserFixtures($hasher, $paymentService)];
     }
 
     public function getToken(string $username, string $password): string
@@ -119,5 +122,38 @@ class BillingUserControllerTest extends AbstractTest
         $userData = json_decode($client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         $this->assertEquals($email, $userData['username']);
+    }
+
+
+    /**
+     * @dataProvider coursesDataSet
+     */
+    public function testBuyCourse($status, $courseCode): void
+    {
+        $client = static::getClient();
+        $email = "user@email.com";
+        $token = $this->getToken($email, "qwerty");
+
+        $client->request(
+            'POST',
+            "/api/v1/courses/$courseCode/buy",
+            array(),
+            array(),
+            array('HTTP_Authorization' => "Bearer $token")
+        );
+
+        $this->assertResponseOk();
+
+        $response = json_decode($client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertEquals($status, $response['code']);
+    }
+
+    public function coursesDataSet(): array
+    {
+        return [
+            [200, 'math'],
+            [400, 'db'],
+        ];
     }
 }

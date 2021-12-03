@@ -14,7 +14,7 @@ class CourseFixtures extends Fixture
             ->setName("Базы данных")
             ->setCode("db")
             ->setType(COURSE_TYPE_BUY)
-            ->setCost(100)
+            ->setCost(500)
         ;
 
         $manager->persist($course1);

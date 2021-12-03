@@ -44,7 +44,13 @@ env_create:
 	echo "MAILER_DSN=smtp://mailhog:1025" >> .env.local
 	cp .env.local .env.test.local
 
+db_up:
+	docker-compose exec php bin/console doctrine:database:create
+	docker-compose exec php bin/console doctrine:migrations:migrate
+	docker-compose exec php bin/console doctrine:database:create --env=test
+	docker-compose exec php bin/console doctrine:migrations:migrate --env=test
+
 composer_install:
 	${COMPOSER} install
 
-install: env_create up composer_install
+install: env_create up composer_install db_up
