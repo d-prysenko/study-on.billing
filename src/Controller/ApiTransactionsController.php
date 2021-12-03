@@ -22,24 +22,8 @@ class ApiTransactionsController extends ApiAbstractController
         $transactionRep = $em->getRepository(Transaction::class);
         $userRep = $em->getRepository(User::class);
 
-//        $token = $request->headers->get('authorization');
-//        $token = explode(" ", $token)[1];
-//
-//        try {
-//            $tokenData = $jwtEncoder->decode($token);
-//        } catch (JWTDecodeFailureException $ex) {
-//            return $this->json(['code' => 400, 'message' => $ex->getMessage()]);
-//        }
-//
-//        $user = $userRep->findOneBy(['email' => $tokenData['username']]);
-
         $user = $userRep->fetchUserByRequest($request);
 
-//        if (is_null($user)) {
-//            return $this->json(['code' => 401, 'message' => 'Cannot find user by given email']);
-//        }
-
-//        return $this->json($user->getTransactions());
         return $this->json($transactionRep->findAllByUser($user));
     }
 }

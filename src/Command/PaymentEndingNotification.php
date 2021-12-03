@@ -34,7 +34,7 @@ class PaymentEndingNotification extends Command
         $output->writeln("Sending email..");
 
         $entries = $this->transactionRepository->findAllPreExpiredCourses();
-dd($entries);
+
         foreach ($entries as $entry) {
             $email = (new TemplatedEmail())
                 ->from('notification@studyon.com')

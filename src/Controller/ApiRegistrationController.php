@@ -78,20 +78,14 @@ class ApiRegistrationController extends ApiAbstractController
 
         if (count($errors) > 0)
         {
-            return $this->json([
-                'code' => 401,
-                'message' => $errors->get(0)->getMessage(),
-            ], 401);
+            return $this->jsonMessage(401, $errors->get(0)->getMessage());
         }
 
         $user = $em->getRepository(User::class)->findByEmail($userDto->username);
 
         if (!is_null($user))
         {
-            return $this->json([
-                'code' => 401,
-                'message' => 'Email already in use!',
-            ], 401);
+            return $this->jsonMessage(401, 'Email already in use!');
         }
 
         $user = User::fromDto($userDto);
