@@ -50,7 +50,7 @@ class BillingUserControllerTest extends AbstractTest
     /**
      * @dataProvider getAuthenticationDataSet
      */
-    public function testJsonRequest(int $expectedStatusCode, string $url, array $body): void
+    public function testResponseCode(int $expectedStatusCode, string $url, array $body): void
     {
         $client = static::getClient();
 
@@ -66,15 +66,6 @@ class BillingUserControllerTest extends AbstractTest
         );
 
         $status = $client->getResponse()->getStatusCode();
-        $contentType = $client->getResponse()->headers->get('content-type');
-
-        $info = 'status: ' . $status . "\n";
-        $info .= 'content-type: ' . $contentType;
-        if ($contentType === "application/json")
-        {
-            $info .= "content:\n" . $client->getResponse()->getContent();
-        }
-//        dd($info);
 
         $this->assertEquals($expectedStatusCode, $status);
     }
@@ -107,15 +98,6 @@ class BillingUserControllerTest extends AbstractTest
         );
 
         $status = $client->getResponse()->getStatusCode();
-        $contentType = $client->getResponse()->headers->get('content-type');
-
-        $info = 'status: ' . $status . "\n";
-        $info .= 'content-type: ' . $contentType;
-        if ($contentType === "application/json")
-        {
-            $info .= "content:\n" . $client->getResponse()->getContent();
-        }
-        //dd($info);
 
         $this->assertEquals(200, $status);
 
@@ -128,7 +110,7 @@ class BillingUserControllerTest extends AbstractTest
     /**
      * @dataProvider coursesDataSet
      */
-    public function testBuyCourse($status, $courseCode): void
+    public function testCourses($status, $urn): void
     {
         $client = static::getClient();
         $email = "user@email.com";
@@ -136,7 +118,7 @@ class BillingUserControllerTest extends AbstractTest
 
         $client->request(
             'POST',
-            "/api/v1/courses/$courseCode/buy",
+            "/api/v1/courses/$urn",
             array(),
             array(),
             array('HTTP_Authorization' => "Bearer $token")
@@ -152,8 +134,8 @@ class BillingUserControllerTest extends AbstractTest
     public function coursesDataSet(): array
     {
         return [
-            [200, 'math'],
-            [400, 'db'],
+            [200, 'math/buy'],
+            [400, 'db/buy'],
         ];
     }
 }
