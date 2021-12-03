@@ -53,6 +53,7 @@ class PaymentEndingNotification extends Command
             } catch (TransportExceptionInterface $e) {
                 $output->writeln("Failed to send email");
                 $output->writeln($e->getMessage());
+
                 return Command::FAILURE;
             }
         }
