@@ -3,6 +3,7 @@ php:
   - 7.4
 
 cache:
+  yarn: true
   directories:
     - ${HOME}/.composer/cache
     - ./bin/.phpunit
@@ -17,17 +18,18 @@ addons:
 
 before_install:
   - sudo chown -R ${UID:-1000}:${GID:-1000} $PWD
-  - sudo chown -R ${UID:-1000}:${GID:-1000} ${HOME}/.yarn
-  - sudo chown -R ${UID:-1000}:${GID:-1000} ${HOME}/.composer
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
-  - docker network create studyonbilling_default
+  - docker -v
+  - docker-compose -v
 
 install:
+  - docker-compose build
   - make up
-
+  - docker-compose exec php bin/console doctrine:fixtures:load --env=test --no-interaction
+  - ls
 script:
-  - make phpunit
+  - docker-compose exec php bin/phpunit
 
 after_script:
-  - make down
+  - docker-compose down
