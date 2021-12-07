@@ -25,7 +25,6 @@ before_install:
 
 install:
   - make up
-  - make fixtload
 
 script:
   - make phpunit
