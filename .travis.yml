@@ -26,8 +26,8 @@ before_install:
 install:
   - docker-compose build
   - make up
-  - docker-compose exec php bin/console doctrine:fixtures:load --env=test --no-interaction
   - ls
+
 script:
   - docker-compose exec php bin/phpunit
 
