@@ -26,7 +26,7 @@ before_install:
 install:
   - docker-compose build
   - make up
-  - ls
+  - ls -la
 
 script:
   - docker-compose exec php bin/phpunit
