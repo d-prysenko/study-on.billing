@@ -2,8 +2,6 @@
 
 namespace App\DTO;
 
-use App\Entity\Course;
-
 class CourseDTO
 {
     public string $name;

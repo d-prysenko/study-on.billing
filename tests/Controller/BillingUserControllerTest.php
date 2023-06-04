@@ -6,16 +6,13 @@ use App\DataFixtures\CourseFixtures;
 use App\DataFixtures\UserFixtures;
 use App\Service\PaymentService;
 use App\Tests\AbstractTest;
-use Exception;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class BillingUserControllerTest extends AbstractTest
 {
 
     protected function getFixtures(): array
     {
-        $hasher = static::$container->get('security.user_password_hasher');
+        $hasher = static::getContainer()->get('security.user_password_hasher');
         $paymentService = new PaymentService(self::getEntityManager());
         return [new CourseFixtures(), new UserFixtures($hasher, $paymentService)];
     }

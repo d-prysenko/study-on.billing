@@ -60,7 +60,7 @@ abstract class AbstractTest extends WebTestCase
      */
     protected static function getEntityManager(): EntityManager
     {
-        return static::$container->get('doctrine')->getManager();
+        return static::getContainer()->get('doctrine')->getManager();
     }
 
     /**
@@ -84,7 +84,7 @@ abstract class AbstractTest extends WebTestCase
             }
 
             if ($fixture instanceof ContainerAwareInterface) {
-                $fixture->setContainer(static::$container);
+                $fixture->setContainer(static::getContainer());
             }
 
             $loader->addFixture($fixture);

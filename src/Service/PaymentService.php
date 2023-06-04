@@ -7,11 +7,7 @@ use App\Entity\Transaction;
 use App\Entity\User;
 use App\Exception\AlreadyExistsException;
 use App\Exception\NotEnoughFundsException;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
-use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
 class PaymentService
