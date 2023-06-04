@@ -3,21 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Service\PaymentService;
-use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
-use Lexik\Bundle\JWTAuthenticationBundle\Exception\UserNotFoundException;
-use Nelmio\ApiDocBundle\Annotation\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Nelmio\ApiDocBundle\Annotation as Nelmio;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use OpenApi\Annotations as OA;
 
 class ApiUserController extends ApiAbstractController
 {
     /**
-     * @OA\Get(
+     * @Nelmio\Operation(
+     *    tags={"User"},
      *	  summary="Returns information about current user",
      *	  @OA\Response(
      *		 response="200",
@@ -56,7 +51,7 @@ class ApiUserController extends ApiAbstractController
      *     @OA\Schema(type="string", example="Bearer *token*")
      * )
      *
-     * @Security(name="Bearer")
+     * @Nelmio\Security(name="Bearer")
      */
     public function current(Request $request): Response
     {

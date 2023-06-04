@@ -4,24 +4,21 @@ namespace App\Controller;
 
 use App\DTO\UserDto;
 use App\Entity\User;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
 use JMS\Serializer\SerializerBuilder;
-use Nelmio\ApiDocBundle\Annotation\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Nelmio\ApiDocBundle\Annotation as Nelmio;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Routing\Annotation\Route;
-use OpenApi\Annotations as OA;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
 
 class ApiRegistrationController extends ApiAbstractController
 {
     /**
-     * @OA\Post(
+     * @Nelmio\Operation(
+     *    tags={"Authorization"},
      *	  summary="Registrates new user",
      *	  @OA\RequestBody(
      *	 	  @OA\MediaType(
@@ -59,7 +56,7 @@ class ApiRegistrationController extends ApiAbstractController
      *	  )
      * )
      *
-     * @Security(name="Bearer")
+     * @Nelmio\Security(name="Bearer")
      */
     public function register(
         Request $request,

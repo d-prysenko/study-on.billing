@@ -2,18 +2,18 @@
 
 namespace App\Controller;
 
-use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
 use Gesdinet\JWTRefreshTokenBundle\Service\RefreshToken;
+use Nelmio\ApiDocBundle\Annotation as Nelmio;
+use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use OpenApi\Annotations as OA;
 
 class ApiRefreshTokenController extends AbstractController
 {
     /**
-     * @OA\Post(
+     * @Nelmio\Operation(
+     *    tags={"Authorization"},
      *	  summary="Refreshes token",
      *	  @OA\RequestBody(
      *	 	  @OA\MediaType(

@@ -2,20 +2,24 @@
 
 namespace App\Controller;
 
-use App\Entity\Course;
 use App\Entity\Transaction;
 use App\Entity\User;
-use App\Repository\TransactionRepository;
 use App\Service\PaymentService;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Nelmio\ApiDocBundle\Annotation as Nelmio;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 class ApiTransactionsController extends ApiAbstractController
 {
+    /**
+     * @Nelmio\Operation(
+     *    tags={"User"},
+     *	  summary="Get all transactions"
+     * )
+     *
+     * @Nelmio\Security(name="Bearer")
+     */
     public function getTransactions(Request $request, JWTEncoderInterface $jwtEncoder, PaymentService $paymentService): Response
     {
         $em = $this->getDoctrine()->getManager();

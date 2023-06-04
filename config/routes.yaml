@@ -60,7 +60,7 @@ api_v1_course_buy:
   methods:    POST
 
 api_v1_transactions:
-  path:       /api/v1/transactions
+  path:       /api/v1/user/transactions
   controller: App\Controller\ApiTransactionsController::getTransactions
   methods:    GET
 

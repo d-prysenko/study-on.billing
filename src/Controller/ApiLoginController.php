@@ -2,18 +2,15 @@
 
 namespace App\Controller;
 
-use Nelmio\ApiDocBundle\Annotation\Model;
-use Nelmio\ApiDocBundle\Annotation\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\DTO\UserDto;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Nelmio\ApiDocBundle\Annotation as Nelmio;
 use OpenApi\Annotations as OA;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ApiLoginController extends AbstractController
 {
     /**
-     * @OA\Post(
+     * @Nelmio\Operation(
+     *    tags={"Authorization"},
      *	  path="/api/v1/auth",
      *	  summary="Authorize user",
      *	  @OA\RequestBody(
@@ -52,7 +49,7 @@ class ApiLoginController extends AbstractController
      *	  )
      * )
      *
-     * @Security(name="Bearer")
+     * @Nelmio\Security(name="Bearer")
      */
     public function auth(): void
     {
