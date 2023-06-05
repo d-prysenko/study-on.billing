@@ -100,6 +100,11 @@ class Course
         return $this;
     }
 
+    public function getTypeString(): string
+    {
+        return static::intTypeToString($this->type);
+    }
+
     public static function intTypeToString(int $type): string
     {
         switch ($type)
